@@ -1,6 +1,52 @@
 ---
 layout: null
 ---
- test
 
+<p>
+  Below we are calling &#123;% javascript 'data.js' %}
+</p>
+
+ <p>
+   data.js is trying to dynamically create itself from the _data/test.csv file
+ </p>
+
+
+<p>
+  data.js content
+</p>
+<pre>
+&#123;{ 'test' | build_json_from_csv }}
+</pre>
+
+<p>
+   the build_json_from_csv tries to read the data object but it is not initialized
+</p>
+
+<pre>
+  module Jekyll
+    module CsvFilter
+      def build_json_from_csv(csv_filename)
+        if @context.registers[:site].data.empty?
+          puts "============== data empty .  dumping @context.registers[:site] "
+          pp @context.registers[:site]
+          puts "================ end"
+        end
+        data = @context.registers[:site].data[csv_filename]
+        jsonify(data)
+      end
+    end
+  end
+</pre>
+
+<p>
+  the next line in the source is the call to &#123;% javascript 'data.js' %}
+</p>
  {% javascript 'data.js' %}
+
+ <p>
+   see also <a href="https://github.com/jekyll/jekyll-assets/issues/300">https://github.com/jekyll/jekyll-assets/issues/300</a>
+ </p>
+
+ <p>
+   Note. i have a .bundle/config file that forces gems into the local vendor directory
+ </p>
